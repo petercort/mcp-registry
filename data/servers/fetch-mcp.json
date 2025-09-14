@@ -1,0 +1,41 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.zcaceres/fetch-mcp",
+  "description": "A flexible HTTP fetching Model Context Protocol server for web scraping and API calls",
+  "status": "active",
+  "version": "1.0.2",
+  "packages": [
+    {
+      "registry_type": "npm",
+      "identifier": "mcp-fetch-server",
+      "version": "1.0.2"
+    }
+  ],
+  "author": {
+    "name": "Zach Caceres",
+    "email": "zach@zach.dev",
+    "url": "https://github.com/zcaceres"
+  },
+  "homepage": "https://github.com/zcaceres/fetch-mcp",
+  "license": "MIT",
+  "keywords": [
+    "http",
+    "fetch",
+    "web-scraping",
+    "api",
+    "requests",
+    "networking"
+  ],
+  "capabilities": [
+    "tools"
+  ],
+  "_meta": {
+    "github.com/registry": {
+      "stars": 592,
+      "forks": 98,
+      "language": "TypeScript",
+      "topics": ["mcp", "http", "fetch", "web", "api"],
+      "last_updated": "2025-09-11T08:39:14Z"
+    }
+  }
+}

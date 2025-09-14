@@ -1,0 +1,43 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.exa-labs/exa-mcp-server",
+  "description": "Exa Web Search API MCP server for real-time web searches, academic papers, and Twitter/X.com search",
+  "status": "active",
+  "version": "2.0.3",
+  "packages": [
+    {
+      "registry_type": "npm",
+      "identifier": "exa-mcp-server",
+      "version": "2.0.3"
+    }
+  ],
+  "author": {
+    "name": "Exa Labs",
+    "email": "contact@exa.ai",
+    "url": "https://github.com/exa-labs"
+  },
+  "homepage": "https://github.com/exa-labs/exa-mcp-server",
+  "license": "MIT",
+  "keywords": [
+    "search",
+    "web-search",
+    "exa",
+    "research",
+    "papers",
+    "academic",
+    "twitter",
+    "real-time"
+  ],
+  "capabilities": [
+    "tools"
+  ],
+  "_meta": {
+    "github.com/registry": {
+      "stars": 2239,
+      "forks": 188,
+      "language": "TypeScript",
+      "topics": ["mcp", "search mcp", "model context protocol", "exa", "search", "websearch", "claude", "ai", "research", "papers", "linkedin"],
+      "last_updated": "2025-09-14T03:07:11Z"
+    }
+  }
+}

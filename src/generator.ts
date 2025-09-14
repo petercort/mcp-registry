@@ -23,12 +23,12 @@ export class StaticSiteGenerator {
       name: 'MCP Registry',
       description: 'A registry for Model Context Protocol servers',
       version: '1.0.0',
-      base_url: 'https://your-username.github.io/mcp-registry',
+      base_url: 'https://petercort.github.io/mcp-registry',
       api_version: 'v0',
       contact: {
         name: 'Registry Maintainer',
         email: 'maintainer@example.com',
-        url: 'https://github.com/your-username/mcp-registry'
+        url: 'https://github.com/petercort/mcp-registry'
       },
       license: {
         name: 'MIT',
@@ -144,6 +144,11 @@ export class StaticSiteGenerator {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https:;">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <title>${this.config.name}</title>
     <style>
         body {
@@ -302,6 +307,11 @@ export class StaticSiteGenerator {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https:;">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <title>API Documentation - ${this.config.name}</title>
     <style>
         body {

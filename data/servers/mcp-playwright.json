@@ -1,0 +1,41 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.executeautomation/mcp-playwright",
+  "description": "Playwright MCP server for browser automation, web scraping, and testing with Claude Desktop and IDEs",
+  "status": "active",
+  "version": "1.0.6",
+  "packages": [
+    {
+      "registry_type": "npm",
+      "identifier": "@executeautomation/playwright-mcp-server",
+      "version": "1.0.6"
+    }
+  ],
+  "author": {
+    "name": "ExecuteAutomation, Ltd",
+    "email": "info@executeautomation.com",
+    "url": "https://executeautomation.com"
+  },
+  "homepage": "https://executeautomation.github.io/mcp-playwright/",
+  "license": "MIT",
+  "keywords": [
+    "playwright",
+    "automation",
+    "browser",
+    "testing",
+    "web-scraping",
+    "ai-tools"
+  ],
+  "capabilities": [
+    "tools"
+  ],
+  "_meta": {
+    "github.com/registry": {
+      "stars": 4757,
+      "forks": 417,
+      "language": "TypeScript",
+      "topics": ["playwright", "automation", "AI", "Claude MCP"],
+      "last_updated": "2025-09-14T12:29:38Z"
+    }
+  }
+}

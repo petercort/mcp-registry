@@ -80,11 +80,28 @@ Create JSON files in the \`data/servers/\` directory following the MCP server sc
 # Build the static site
 npm run build
 
-# Serve locally (requires Python 3)
+# Serve locally with HTTP (requires Python 3)
 npm run serve
 
-# Visit http://localhost:8000
+# Serve locally with HTTPS (requires Node.js and OpenSSL)
+npm run serve:node
+
+# Visit http://localhost:8000 (HTTP) or https://localhost:8443 (HTTPS)
 \`\`\`
+
+#### HTTPS Development
+
+For HTTPS development (recommended for testing API integrations):
+
+\`\`\`bash
+# Generate self-signed certificate (one-time setup)
+npm run generate-cert
+
+# Start HTTPS server
+npm run serve:node
+\`\`\`
+
+**Note**: Self-signed certificates will show a security warning in browsers. This is normal for local development.
 
 ### 4. Deploy to GitHub Pages
 

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.zcaceres/markdownify-mcp",
+  "description": "MCP server for converting almost anything to Markdown with OCR and document processing",
+  "status": "active",
+  "version": "0.0.2",
+  "packages": [
+    {
+      "registry_type": "npm",
+      "identifier": "mcp-markdownify-server",
+      "version": "0.0.2"
+    }
+  ],
+  "author": {
+    "name": "Zach Caceres",
+    "email": "zach@zach.dev",
+    "url": "https://github.com/zcaceres"
+  },
+  "homepage": "https://github.com/zcaceres/markdownify-mcp",
+  "license": "MIT",
+  "keywords": [
+    "markdown",
+    "conversion",
+    "ocr",
+    "document-processing",
+    "text-extraction",
+    "ai-tools"
+  ],
+  "capabilities": [
+    "tools"
+  ],
+  "_meta": {
+    "github.com/registry": {
+      "stars": 2115,
+      "forks": 175,
+      "language": "TypeScript",
+      "topics": ["ai", "anthropic", "anthropic-ai", "anthropic-claude", "markdown", "mcp", "model-context-protocol", "ocr", "tools"],
+      "last_updated": "2025-09-14T02:40:53Z"
+    }
+  }
+}

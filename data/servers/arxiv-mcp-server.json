@@ -1,0 +1,42 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.blazickjp/arxiv-mcp-server",
+  "description": "A Model Context Protocol server for searching and analyzing arXiv papers with PDF processing",
+  "status": "active",
+  "version": "0.3.1",
+  "packages": [
+    {
+      "registry_type": "pypi",
+      "identifier": "arxiv-mcp-server",
+      "version": "0.3.1"
+    }
+  ],
+  "author": {
+    "name": "Joseph Blazick",
+    "email": "blazickjp@amazon.com",
+    "url": "https://github.com/blazickjp"
+  },
+  "homepage": "https://github.com/blazickjp/arxiv-mcp-server",
+  "license": "MIT",
+  "keywords": [
+    "arxiv",
+    "research",
+    "papers",
+    "academic",
+    "pdf",
+    "scientific-literature",
+    "search"
+  ],
+  "capabilities": [
+    "tools"
+  ],
+  "_meta": {
+    "github.com/registry": {
+      "stars": 1686,
+      "forks": 115,
+      "language": "Python",
+      "topics": ["ai", "arxiv", "claude-ai", "gpt", "mcp-server", "papers", "research"],
+      "last_updated": "2025-09-14T05:32:40Z"
+    }
+  }
+}

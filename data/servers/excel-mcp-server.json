@@ -1,0 +1,42 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.haris-musa/excel-mcp-server",
+  "description": "A Model Context Protocol server for Excel file manipulation with support for reading, writing, and editing Excel files using Python and openpyxl",
+  "status": "active",
+  "version": "0.1.7",
+  "packages": [
+    {
+      "registry_type": "pypi",
+      "identifier": "excel-mcp-server",
+      "version": "0.1.7"
+    }
+  ],
+  "author": {
+    "name": "Haris Musa",
+    "email": "haris.musa@outlook.com",
+    "url": "https://github.com/haris-musa"
+  },
+  "homepage": "https://github.com/haris-musa/excel-mcp-server",
+  "repository": "https://github.com/haris-musa/excel-mcp-server",
+  "license": "MIT",
+  "keywords": [
+    "excel",
+    "mcp",
+    "automation",
+    "spreadsheet",
+    "openpyxl",
+    "data-manipulation"
+  ],
+  "capabilities": [
+    "tools"
+  ],
+  "_meta": {
+    "github.com/registry": {
+      "stars": 2296,
+      "forks": 260,
+      "language": "Python",
+      "topics": ["ai", "automation", "excel", "llm", "mcp", "mcp-server", "sse", "stdio", "streamable-http", "toolcalling"],
+      "last_updated": "2025-09-14T13:23:00Z"
+    }
+  }
+}

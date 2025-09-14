@@ -1,0 +1,42 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.example/database-tools",
+  "description": "MCP server for database operations and SQL query execution",
+  "status": "active",
+  "version": "1.0.5",
+  "remotes": [
+    {
+      "url": "https://github.com/example/database-mcp-tools.git",
+      "ref": "v1.0.5"
+    }
+  ],
+  "author": {
+    "name": "Database Team",
+    "email": "db-team@example.com",
+    "url": "https://github.com/example-org"
+  },
+  "homepage": "https://github.com/example/database-mcp-tools",
+  "repository": "https://github.com/example/database-mcp-tools",
+  "license": "MIT",
+  "keywords": [
+    "database",
+    "sql",
+    "postgresql",
+    "mysql",
+    "sqlite"
+  ],
+  "capabilities": [
+    "tools"
+  ],
+  "_meta": {
+    "example.registry/custom": {
+      "user_rating": 4.2,
+      "download_count": 5432,
+      "security_scan": {
+        "last_scanned": "2024-05-28T14:15:00Z",
+        "vulnerabilities_found": 1,
+        "severity": "low"
+      }
+    }
+  }
+}

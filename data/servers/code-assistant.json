@@ -1,0 +1,44 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.example/code-assistant",
+  "description": "MCP server providing code analysis and refactoring tools",
+  "status": "active",
+  "version": "3.0.0",
+  "packages": [
+    {
+      "registry_type": "npm",
+      "identifier": "@example/code-assistant-mcp",
+      "version": "3.0.0"
+    }
+  ],
+  "author": {
+    "name": "CodeTools Inc",
+    "email": "info@codetools.com",
+    "url": "https://codetools.com"
+  },
+  "homepage": "https://github.com/example/code-assistant-mcp",
+  "license": "BSD-3-Clause",
+  "keywords": [
+    "code",
+    "analysis",
+    "refactoring",
+    "ast",
+    "typescript",
+    "javascript"
+  ],
+  "capabilities": [
+    "tools",
+    "prompts"
+  ],
+  "_meta": {
+    "example.registry/custom": {
+      "user_rating": 4.9,
+      "download_count": 15678,
+      "security_scan": {
+        "last_scanned": "2024-06-20T09:45:00Z",
+        "vulnerabilities_found": 0
+      },
+      "featured": true
+    }
+  }
+}

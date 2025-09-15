@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Server Registry</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6; 
+            color: #333; 
+            background: #f5f5f5;
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 2rem;
+        }
+        header { 
+            background: #2563eb; 
+            color: white; 
+            padding: 2rem 0; 
+            margin-bottom: 2rem;
+        }
+        h1 { 
+            font-size: 2.5rem; 
+            margin-bottom: 0.5rem;
+        }
+        .subtitle { 
+            font-size: 1.1rem; 
+            opacity: 0.9;
+        }
+        .api-section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .endpoint {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .method {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        .get { background: #dcfce7; color: #166534; }
+        .post { background: #fef3c7; color: #92400e; }
+        .url { 
+            font-family: monospace; 
+            background: #1e293b; 
+            color: #f1f5f9; 
+            padding: 0.25rem 0.5rem; 
+            border-radius: 4px;
+        }
+        .server-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .server-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: box-shadow 0.2s;
+        }
+        .server-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .server-name {
+            font-weight: bold;
+            color: #2563eb;
+            margin-bottom: 0.5rem;
+        }
+        .server-description {
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+        .server-meta {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #64748b;
+        }
+        .error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2563eb;
+        }
+        .stat-label {
+            color: #64748b;
+            margin-top: 0.5rem;
+        }
+        .search-box {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        .tag {
+            display: inline-block;
+            background: #e5e7eb;
+            color: #374151;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin: 0.125rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>MCP Server Registry</h1>
+            <p class="subtitle">Discover and explore Model Context Protocol servers</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- API Documentation -->
+        <div class="api-section">
+            <h2>API Endpoints</h2>
+            <p>This registry provides a REST API for discovering MCP servers:</p>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <span class="url">/api/v0/servers</span>
+                <p>List all MCP servers with optional pagination</p>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <span class="url">/api/v0/servers/{id}</span>
+                <p>Get detailed information about a specific server</p>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <span class="url">/api/v0/health</span>
+                <p>Health check endpoint</p>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="total-servers">-</div>
+                <div class="stat-label">Total Servers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="active-servers">-</div>
+                <div class="stat-label">Active Servers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="total-packages">-</div>
+                <div class="stat-label">Packages</div>
+            </div>
+        </div>
+
+        <!-- Server Browser -->
+        <div class="api-section">
+            <h2>Browse Servers</h2>
+            <input type="text" class="search-box" id="search" placeholder="Search servers by name, description, or keywords...">
+            
+            <div id="loading" class="loading">Loading servers...</div>
+            <div id="error" class="error" style="display: none;"></div>
+            <div id="servers" class="server-grid"></div>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        // Initialize the application
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                await MCPRegistry.init();
+                displayStats();
+                displayServers();
+                setupSearch();
+            } catch (error) {
+                showError('Failed to load server data: ' + error.message);
+            }
+        });
+
+        function displayStats() {
+            const servers = MCPRegistry.getAllServers();
+            const activeServers = servers.filter(s => s.status === 'active');
+            const totalPackages = servers.reduce((sum, s) => sum + (s.packages?.length || 0), 0);
+
+            document.getElementById('total-servers').textContent = servers.length;
+            document.getElementById('active-servers').textContent = activeServers.length;
+            document.getElementById('total-packages').textContent = totalPackages;
+        }
+
+        function displayServers(serversToShow = null) {
+            const servers = serversToShow || MCPRegistry.getAllServers();
+            const container = document.getElementById('servers');
+            const loading = document.getElementById('loading');
+            
+            loading.style.display = 'none';
+            
+            if (servers.length === 0) {
+                container.innerHTML = '<p>No servers found.</p>';
+                return;
+            }
+
+            container.innerHTML = servers.map(server => `
+                <div class="server-card">
+                    <div class="server-name">${escapeHtml(server.name)}</div>
+                    <div class="server-description">${escapeHtml(server.description)}</div>
+                    <div class="server-meta">
+                        <strong>Version:</strong> ${escapeHtml(server.version)}<br>
+                        <strong>Status:</strong> ${escapeHtml(server.status)}<br>
+                        ${server.packages ? `<strong>Packages:</strong> ${server.packages.length}<br>` : ''}
+                        ${server.repository?.url ? `<strong>Repository:</strong> <a href="${escapeHtml(server.repository.url)}" target="_blank">View</a><br>` : ''}
+                        ${server.keywords ? `<div style="margin-top: 0.5rem;">${server.keywords.map(k => `<span class="tag">${escapeHtml(k)}</span>`).join('')}</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setupSearch() {
+            const searchInput = document.getElementById('search');
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                if (!query) {
+                    displayServers();
+                    return;
+                }
+
+                const servers = MCPRegistry.getAllServers();
+                const filtered = servers.filter(server => 
+                    server.name.toLowerCase().includes(query) ||
+                    server.description.toLowerCase().includes(query) ||
+                    (server.keywords && server.keywords.some(k => k.toLowerCase().includes(query)))
+                );
+                
+                displayServers(filtered);
+            });
+        }
+
+        function showError(message) {
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            
+            loading.style.display = 'none';
+            error.style.display = 'block';
+            error.textContent = message;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

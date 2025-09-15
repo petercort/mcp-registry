@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Registry API Tester</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 2rem;
+            background: #f8fafc;
+        }
+        .header {
+            background: #1e293b;
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        .endpoint-section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .method {
+            background: #22c55e;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .url {
+            font-family: monospace;
+            background: #f1f5f9;
+            padding: 0.5rem;
+            border-radius: 4px;
+            flex: 1;
+        }
+        .test-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .test-button:hover {
+            background: #2563eb;
+        }
+        .test-button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+        .params {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .param-input {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+        }
+        .response {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+        .loading {
+            color: #f59e0b;
+        }
+        .error {
+            color: #ef4444;
+        }
+        .success {
+            color: #22c55e;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MCP Registry API Tester</h1>
+        <p>Test the MCP Server Registry API endpoints interactively</p>
+    </div>
+
+    <!-- Health Check -->
+    <div class="endpoint-section">
+        <div class="endpoint-header">
+            <span class="method">GET</span>
+            <span class="url">/api/v0/health</span>
+            <button class="test-button" onclick="testHealth()">Test</button>
+        </div>
+        <p>Check the health status of the registry</p>
+        <div id="health-response" class="response" style="display: none;"></div>
+    </div>
+
+    <!-- List Servers -->
+    <div class="endpoint-section">
+        <div class="endpoint-header">
+            <span class="method">GET</span>
+            <span class="url">/api/v0/servers</span>
+            <button class="test-button" onclick="testServers()">Test</button>
+        </div>
+        <p>List all MCP servers with optional pagination</p>
+        <div class="params">
+            <input type="text" class="param-input" id="servers-cursor" placeholder="cursor (optional)">
+            <input type="number" class="param-input" id="servers-limit" placeholder="limit (default: 50)" min="1" max="100">
+        </div>
+        <div id="servers-response" class="response" style="display: none;"></div>
+    </div>
+
+    <!-- Get Server by ID -->
+    <div class="endpoint-section">
+        <div class="endpoint-header">
+            <span class="method">GET</span>
+            <span class="url">/api/v0/servers/{id}</span>
+            <button class="test-button" onclick="testServerById()">Test</button>
+        </div>
+        <p>Get detailed information about a specific server</p>
+        <div class="params">
+            <input type="text" class="param-input" id="server-id" placeholder="Server ID (get from servers list)">
+            <input type="text" class="param-input" id="server-version" placeholder="version (optional)">
+        </div>
+        <div id="server-response" class="response" style="display: none;"></div>
+    </div>
+
+    <!-- Available Server IDs -->
+    <div class="endpoint-section">
+        <h3>Available Server IDs</h3>
+        <p>Use these IDs to test the server details endpoint:</p>
+        <div id="available-ids" style="font-family: monospace; background: #f1f5f9; padding: 1rem; border-radius: 4px;">
+            Loading...
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        async function testHealth() {
+            const responseEl = document.getElementById('health-response');
+            responseEl.style.display = 'block';
+            responseEl.textContent = 'Loading...';
+            responseEl.className = 'response loading';
+
+            try {
+                const response = await fetch('/api/v0/health');
+                const data = await response.json();
+                
+                responseEl.textContent = JSON.stringify(data, null, 2);
+                responseEl.className = response.ok ? 'response success' : 'response error';
+            } catch (error) {
+                responseEl.textContent = 'Error: ' + error.message;
+                responseEl.className = 'response error';
+            }
+        }
+
+        async function testServers() {
+            const responseEl = document.getElementById('servers-response');
+            const cursor = document.getElementById('servers-cursor').value;
+            const limit = document.getElementById('servers-limit').value;
+
+            responseEl.style.display = 'block';
+            responseEl.textContent = 'Loading...';
+            responseEl.className = 'response loading';
+
+            try {
+                const params = new URLSearchParams();
+                if (cursor) params.append('cursor', cursor);
+                if (limit) params.append('limit', limit);
+
+                const url = '/api/v0/servers' + (params.toString() ? '?' + params : '');
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                responseEl.textContent = JSON.stringify(data, null, 2);
+                responseEl.className = response.ok ? 'response success' : 'response error';
+            } catch (error) {
+                responseEl.textContent = 'Error: ' + error.message;
+                responseEl.className = 'response error';
+            }
+        }
+
+        async function testServerById() {
+            const responseEl = document.getElementById('server-response');
+            const serverId = document.getElementById('server-id').value;
+            const version = document.getElementById('server-version').value;
+
+            if (!serverId) {
+                responseEl.style.display = 'block';
+                responseEl.textContent = 'Error: Server ID is required';
+                responseEl.className = 'response error';
+                return;
+            }
+
+            responseEl.style.display = 'block';
+            responseEl.textContent = 'Loading...';
+            responseEl.className = 'response loading';
+
+            try {
+                const params = new URLSearchParams();
+                if (version) params.append('version', version);
+
+                const url = `/api/v0/servers/${encodeURIComponent(serverId)}` + (params.toString() ? '?' + params : '');
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                responseEl.textContent = JSON.stringify(data, null, 2);
+                responseEl.className = response.ok ? 'response success' : 'response error';
+            } catch (error) {
+                responseEl.textContent = 'Error: ' + error.message;
+                responseEl.className = 'response error';
+            }
+        }
+
+        async function loadAvailableIds() {
+            try {
+                await MCPRegistry.init();
+                const servers = MCPRegistry.getAllServers();
+                const ids = servers.map(server => {
+                    const id = server._meta?.['io.modelcontextprotocol.registry/official']?.id;
+                    return `${server.name}: ${id}`;
+                }).join('\n');
+                
+                document.getElementById('available-ids').textContent = ids || 'No servers found';
+            } catch (error) {
+                document.getElementById('available-ids').textContent = 'Error loading server IDs: ' + error.message;
+            }
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            loadAvailableIds();
+        });
+    </script>
+</body>
+</html>

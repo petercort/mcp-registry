@@ -33,18 +33,64 @@ jobs:
       - name: Build static site
         run: npm run build:static
 
+      - name: Run tests
+        run: npm test
+
       - name: Verify build output
         run: |
           echo "📁 Checking build output structure:"
           ls -la dist/
+          echo ""
           echo "📄 Checking data files:"
           ls -la dist/data/servers/
-          echo "🔢 Number of JSON files:"
+          echo ""
+          echo "🔢 Number of server JSON files:"
           ls dist/data/servers/*.json | wc -l
-          echo "📊 Sample file content:"
-          head -5 dist/data/servers/arxiv-mcp-server.json
-          echo "🗂️ File tree:"
-          find dist -type f -name "*.json" | head -10
+          echo ""
+          echo "� Checking API endpoints:"
+          echo "  Health endpoint:"
+          ls -la dist/health.json dist/health 2>/dev/null || echo "  ❌ Health endpoints missing"
+          echo "  Servers list endpoint:"
+          ls -la dist/v0/servers.json 2>/dev/null || echo "  ❌ Servers list missing"
+          echo "  Individual server endpoints:"
+          ls dist/v0/servers/*.json 2>/dev/null | wc -l || echo "  ❌ Individual server files missing"
+          echo ""
+          echo "📊 API endpoint validation:"
+          if [ -f "dist/health.json" ]; then
+            echo "  ✅ Health endpoint created"
+            cat dist/health.json | head -5
+          fi
+          if [ -f "dist/v0/servers.json" ]; then
+            echo "  ✅ Servers list endpoint created"
+            echo "    Server count: $(cat dist/v0/servers.json | jq -r '.metadata.count')"
+          fi
+          if [ -f "dist/index.json" ]; then
+            echo "  ✅ API index created"
+            cat dist/index.json | head -3
+          fi
+          echo ""
+          echo "🗂️ Complete file structure:"
+          find dist -type f -name "*.json" | sort
+
+      - name: Test API endpoints functionality
+        run: |
+          echo "🧪 Testing static API generation..."
+          npm run test:static-api
+          echo ""
+          echo "✅ All API endpoints validated and ready for deployment!"
+          echo ""
+          echo "📡 The following API endpoints will be available after deployment:"
+          echo "  🏥 Health Check: /health.json"
+          echo "  📋 Servers List: /v0/servers.json"  
+          echo "  📄 Server Details: /v0/servers/{id}.json"
+          echo "  ℹ️  API Info: /index.json"
+          echo ""
+          SERVER_COUNT=$(cat dist/v0/servers.json | jq -r '.metadata.count')
+          echo "📊 Deployment Summary:"
+          echo "  • $SERVER_COUNT MCP servers available"
+          echo "  • $(find dist -name "*.html" | wc -l) HTML pages"
+          echo "  • $(find dist -name "*.json" | wc -l) JSON endpoints"
+          echo "  • Static site ready for GitHub Pages"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

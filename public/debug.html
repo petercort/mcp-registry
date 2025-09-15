@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - MCP Registry</title>
+    <style>
+        body { 
+            font-family: monospace; 
+            padding: 2rem; 
+            background: #f8f9fa;
+        }
+        .log { 
+            background: #1e1e1e; 
+            color: #f8f8f2; 
+            padding: 1rem; 
+            border-radius: 4px; 
+            white-space: pre-wrap;
+            margin: 1rem 0;
+        }
+        .success { color: #50fa7b; }
+        .error { color: #ff5555; }
+        .warning { color: #f1fa8c; }
+        button {
+            background: #6272a4;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+        button:hover {
+            background: #44475a;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 MCP Registry Debug Page</h1>
+    <p>This page helps debug server data loading issues when deployed.</p>
+    
+    <button onclick="testDataAccess()">Test Data Access</button>
+    <button onclick="testServerIndex()">Test Server Index</button>
+    <button onclick="testAPIInit()">Test API Initialization</button>
+    <button onclick="clearLog()">Clear Log</button>
+    
+    <div id="log" class="log">Ready to test...\n</div>
+
+    <script src="api.js"></script>
+    <script>
+        function log(message, type = 'info') {
+            const logEl = document.getElementById('log');
+            const timestamp = new Date().toISOString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : '';
+            logEl.innerHTML += `<span class="${className}">[${timestamp}] ${message}</span>\n`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = 'Log cleared...\n';
+        }
+
+        async function testDataAccess() {
+            log('🧪 Testing direct data file access...');
+            
+            const testFiles = [
+                './data/servers/arxiv-mcp-server.json',
+                'data/servers/arxiv-mcp-server.json',
+                '../data/servers/arxiv-mcp-server.json'
+            ];
+            
+            for (const path of testFiles) {
+                try {
+                    log(`  Trying: ${path}`);
+                    const response = await fetch(path);
+                    if (response.ok) {
+                        const data = await response.json();
+                        log(`  ✅ SUCCESS: ${path} - Status: ${response.status}`, 'success');
+                        log(`     Server name: ${data.name}`);
+                        break;
+                    } else {
+                        log(`  ❌ FAILED: ${path} - Status: ${response.status}`, 'error');
+                    }
+                } catch (error) {
+                    log(`  ❌ ERROR: ${path} - ${error.message}`, 'error');
+                }
+            }
+        }
+
+        async function testServerIndex() {
+            log('📋 Testing server index access...');
+            
+            const indexPaths = [
+                './servers-index.json',
+                'servers-index.json',
+                '../servers-index.json'
+            ];
+            
+            for (const path of indexPaths) {
+                try {
+                    log(`  Trying: ${path}`);
+                    const response = await fetch(path);
+                    if (response.ok) {
+                        const data = await response.json();
+                        log(`  ✅ SUCCESS: ${path} - Status: ${response.status}`, 'success');
+                        log(`     Generated: ${data.generated}`);
+                        log(`     Server count: ${data.count}`);
+                        log(`     Files: ${data.files.map(f => f.filename).join(', ')}`);
+                        return;
+                    } else {
+                        log(`  ❌ FAILED: ${path} - Status: ${response.status}`, 'error');
+                    }
+                } catch (error) {
+                    log(`  ❌ ERROR: ${path} - ${error.message}`, 'error');
+                }
+            }
+            log('⚠️ Server index not accessible from any path', 'warning');
+        }
+
+        async function testAPIInit() {
+            log('🚀 Testing API initialization...');
+            
+            try {
+                await MCPRegistry.init();
+                const servers = MCPRegistry.getAllServers();
+                log(`✅ API initialized successfully! Loaded ${servers.length} servers`, 'success');
+                
+                if (servers.length > 0) {
+                    log(`📄 Sample server: ${servers[0].name}`);
+                } else {
+                    log('⚠️ No servers loaded - check console for details', 'warning');
+                }
+            } catch (error) {
+                log(`❌ API initialization failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Show environment info on load
+        window.addEventListener('DOMContentLoaded', () => {
+            log('🌐 Environment Information:');
+            log(`   URL: ${window.location.href}`);
+            log(`   Origin: ${window.location.origin}`);
+            log(`   Pathname: ${window.location.pathname}`);
+            log(`   Expected data URL: ${new URL('./data/servers/', window.location.href).href}`);
+            log('');
+        });
+    </script>
+</body>
+</html>

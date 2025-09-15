@@ -11,24 +11,80 @@ class MCPRegistryAPI {
 
     async loadServers() {
         try {
-            // Load all server JSON files
-            const serverFiles = [
-                'arxiv-mcp-server.json',
-                'exa-mcp-server.json', 
-                'excel-mcp-server.json',
-                'fetch-mcp.json',
-                'markdownify-mcp.json',
-                'mcp-playwright.json'
+            console.log('🔍 Loading server index from:', window.location.origin + window.location.pathname);
+
+            // First, load the dynamically generated server index
+            let serverIndex = null;
+            const indexPaths = [
+                './servers-index.json',
+                'servers-index.json',
+                '../servers-index.json'
             ];
+
+            for (const path of indexPaths) {
+                try {
+                    const response = await fetch(path);
+                    if (response.ok) {
+                        serverIndex = await response.json();
+                        console.log(`✅ Loaded server index from ${path} (${serverIndex.count} servers)`);
+                        break;
+                    }
+                } catch (error) {
+                    continue;
+                }
+            }
+
+            // Fallback to hardcoded list if index not found
+            let serverFiles = [];
+            if (serverIndex && serverIndex.files) {
+                serverFiles = serverIndex.files.map(file => file.filename);
+                console.log(`📋 Using dynamic server list: ${serverFiles.join(', ')}`);
+            } else {
+                // Fallback to hardcoded list
+                console.warn('⚠️ Server index not found, using fallback list');
+                serverFiles = [
+                    'arxiv-mcp-server.json',
+                    'exa-mcp-server.json', 
+                    'excel-mcp-server.json',
+                    'fetch-mcp.json',
+                    'markdownify-mcp.json',
+                    'mcp-playwright.json'
+                ];
+            }
 
             const loadPromises = serverFiles.map(async (file) => {
                 try {
-                    const response = await fetch(`../data/servers/${file}`);
-                    if (!response.ok) throw new Error(`Failed to load ${file}`);
+                    // Try multiple path variations to handle different deployment scenarios
+                    const paths = [
+                        `./data/servers/${file}`,
+                        `data/servers/${file}`,
+                        `../data/servers/${file}`
+                    ];
+                    
+                    let response = null;
+                    let lastError = null;
+                    
+                    for (const path of paths) {
+                        try {
+                            response = await fetch(path);
+                            if (response.ok) {
+                                console.log(`✅ Loaded ${file} from ${path}`);
+                                break;
+                            }
+                        } catch (error) {
+                            lastError = error;
+                            continue;
+                        }
+                    }
+                    
+                    if (!response || !response.ok) {
+                        throw new Error(`Failed to load ${file} from any path. Last error: ${lastError?.message || 'Unknown'}`);
+                    }
+                    
                     const data = await response.json();
                     return this.transformServerData(data);
                 } catch (error) {
-                    console.warn(`Failed to load ${file}:`, error);
+                    console.warn(`❌ Failed to load ${file}:`, error);
                     return null;
                 }
             });
@@ -36,9 +92,15 @@ class MCPRegistryAPI {
             const results = await Promise.all(loadPromises);
             this.servers = results.filter(server => server !== null);
             
-            console.log(`Loaded ${this.servers.length} servers`);
+            console.log(`✅ Successfully loaded ${this.servers.length} out of ${serverFiles.length} servers`);
+            
+            if (this.servers.length === 0) {
+                console.error('❌ No servers were loaded! Check that data files are accessible.');
+                console.log('Current location:', window.location.href);
+                console.log('Expected data path:', new URL('./data/servers/', window.location.href).href);
+            }
         } catch (error) {
-            console.error('Error loading servers:', error);
+            console.error('❌ Error loading servers:', error);
             throw error;
         }
     }

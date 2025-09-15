@@ -18,7 +18,8 @@ try {
     'index.html',
     'api.js', 
     'api-test.html',
-    '404.html'
+    '404.html',
+    'servers-index.json'
   ];
 
   for (const file of requiredFiles) {
@@ -84,6 +85,17 @@ try {
   }
 
   console.log('✅ index.html contains expected content');
+
+  // Check server index
+  const indexPath = path.join(distPath, 'servers-index.json');
+  const indexContent = JSON.parse(fs.readFileSync(indexPath, 'utf-8'));
+  
+  if (indexContent.count !== jsonFiles.length) {
+    console.log(`❌ Server index count mismatch: expected ${jsonFiles.length}, got ${indexContent.count}`);
+    process.exit(1);
+  }
+  
+  console.log(`✅ Server index valid (${indexContent.count} servers, generated: ${indexContent.generated})`);
 
   // Sample server data from first file
   const firstFile = jsonFiles[0];

@@ -1,0 +1,66 @@
+{
+  "generated": "2025-09-15T16:37:54.156Z",
+  "count": 6,
+  "files": [
+    {
+      "filename": "arxiv-mcp-server.json",
+      "path": "data/servers/arxiv-mcp-server.json",
+      "size": 1068,
+      "modified": "2025-09-14T13:32:38.437Z",
+      "name": "io.github.blazickjp/arxiv-mcp-server",
+      "description": "A Model Context Protocol server for searching and analyzing arXiv papers with PDF processing",
+      "version": "0.3.1",
+      "status": "active"
+    },
+    {
+      "filename": "exa-mcp-server.json",
+      "path": "data/servers/exa-mcp-server.json",
+      "size": 1121,
+      "modified": "2025-09-14T13:32:38.437Z",
+      "name": "io.github.exa-labs/exa-mcp-server",
+      "description": "Exa Web Search API MCP server for real-time web searches, academic papers, and Twitter/X.com search",
+      "version": "2.0.3",
+      "status": "active"
+    },
+    {
+      "filename": "excel-mcp-server.json",
+      "path": "data/servers/excel-mcp-server.json",
+      "size": 1212,
+      "modified": "2025-09-14T13:32:38.437Z",
+      "name": "io.github.haris-musa/excel-mcp-server",
+      "description": "A Model Context Protocol server for Excel file manipulation with support for reading, writing, and editing Excel files using Python and openpyxl",
+      "version": "0.1.7",
+      "status": "active"
+    },
+    {
+      "filename": "fetch-mcp.json",
+      "path": "data/servers/fetch-mcp.json",
+      "size": 980,
+      "modified": "2025-09-14T13:32:38.456Z",
+      "name": "io.github.zcaceres/fetch-mcp",
+      "description": "A flexible HTTP fetching Model Context Protocol server for web scraping and API calls",
+      "version": "1.0.2",
+      "status": "active"
+    },
+    {
+      "filename": "markdownify-mcp.json",
+      "path": "data/servers/markdownify-mcp.json",
+      "size": 1100,
+      "modified": "2025-09-14T13:32:38.437Z",
+      "name": "io.github.zcaceres/markdownify-mcp",
+      "description": "MCP server for converting almost anything to Markdown with OCR and document processing",
+      "version": "0.0.2",
+      "status": "active"
+    },
+    {
+      "filename": "mcp-playwright.json",
+      "path": "data/servers/mcp-playwright.json",
+      "size": 1096,
+      "modified": "2025-09-14T13:32:38.466Z",
+      "name": "io.github.executeautomation/mcp-playwright",
+      "description": "Playwright MCP server for browser automation, web scraping, and testing with Claude Desktop and IDEs",
+      "version": "1.0.6",
+      "status": "active"
+    }
+  ]
+}

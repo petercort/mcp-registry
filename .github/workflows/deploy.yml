@@ -33,6 +33,19 @@ jobs:
       - name: Build static site
         run: npm run build:static
 
+      - name: Verify build output
+        run: |
+          echo "📁 Checking build output structure:"
+          ls -la dist/
+          echo "📄 Checking data files:"
+          ls -la dist/data/servers/
+          echo "🔢 Number of JSON files:"
+          ls dist/data/servers/*.json | wc -l
+          echo "📊 Sample file content:"
+          head -5 dist/data/servers/arxiv-mcp-server.json
+          echo "🗂️ File tree:"
+          find dist -type f -name "*.json" | head -10
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 

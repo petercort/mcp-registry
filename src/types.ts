@@ -1,100 +1,113 @@
-/**
- * MCP Registry Server Types
- * Based on the MCP registry specification
- */
+// Types based on the OpenAPI specification
+export interface Repository {
+  url: string;
+  source: string;
+  id: string;
+  subfolder?: string;
+}
 
-export type ServerStatus = 'active' | 'inactive' | 'deleted' | 'pending';
-
-export interface PackageInfo {
-  registry_type: 'npm' | 'pypi' | 'github' | 'docker';
+export interface Package {
+  registry_type: string;
+  registry_base_url?: string;
   identifier: string;
   version: string;
-  repository_url?: string;
-  download_url?: string;
+  file_sha256?: string;
+  runtime_hint?: string;
+  runtime_arguments?: Argument[];
+  package_arguments?: Argument[];
+  environment_variables?: KeyValueInput[];
 }
 
-export interface RemoteInfo {
+export interface Input {
+  description?: string;
+  is_required?: boolean;
+  format?: 'string' | 'number' | 'boolean' | 'filepath';
+  value?: string;
+  is_secret?: boolean;
+  default?: string;
+  choices?: string[];
+}
+
+export interface InputWithVariables extends Input {
+  variables?: Record<string, Input>;
+}
+
+export interface PositionalArgument extends InputWithVariables {
+  type: 'positional';
+  value_hint?: string;
+  is_repeated?: boolean;
+}
+
+export interface NamedArgument extends InputWithVariables {
+  type: 'named';
+  name: string;
+  is_repeated?: boolean;
+}
+
+export interface KeyValueInput extends InputWithVariables {
+  name: string;
+}
+
+export type Argument = PositionalArgument | NamedArgument;
+
+export interface Remote {
+  transport_type: 'streamable' | 'sse';
   url: string;
-  ref?: string;
-  subpath?: string;
+  headers?: KeyValueInput[];
 }
 
-export interface ServerMetadata {
-  [key: string]: any;
-}
-
-export interface MCPServer {
-  $schema?: string;
-  id?: string;
+export interface Server {
   name: string;
   description: string;
-  status: ServerStatus;
+  status?: 'active' | 'deprecated';
+  repository?: Repository;
   version: string;
-  packages?: PackageInfo[];
-  remotes?: RemoteInfo[];
+  website_url?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ServerDetail extends Server {
+  $schema?: string;
+  packages?: Package[];
+  remotes?: Remote[];
+  _meta?: {
+    'io.modelcontextprotocol.registry/publisher-provided'?: any;
+    'io.modelcontextprotocol.registry/official'?: {
+      id: string;
+      published_at: string;
+      updated_at: string;
+      is_latest: boolean;
+    };
+    [key: string]: any;
+  };
+}
+
+export interface ServerList {
+  servers: ServerDetail[];
+  metadata?: {
+    next_cursor?: string;
+    count?: number;
+  };
+}
+
+// Extended types for the actual server data structure we have
+export interface ServerData {
+  $schema: string;
+  name: string;
+  description: string;
+  status: 'active' | 'deprecated';
+  version: string;
+  packages: Package[];
   author?: {
     name: string;
-    email?: string;
-    url?: string;
+    email: string;
+    url: string;
   };
   homepage?: string;
   repository?: string;
   license?: string;
   keywords?: string[];
   capabilities?: string[];
-  created_at?: string;
-  updated_at?: string;
-  _meta?: ServerMetadata;
-}
-
-export interface PaginationInfo {
-  page: number;
-  per_page: number;
-  total_count: number;
-  total_pages: number;
-}
-
-export interface ServersListResponse {
-  servers: MCPServer[];
-  pagination: PaginationInfo;
-}
-
-export interface ServerDetailResponse {
-  server: MCPServer;
-}
-
-export interface ErrorResponse {
-  error: {
-    code: string;
-    message: string;
-    details?: any;
-  };
-}
-
-export interface RegistryConfig {
-  name: string;
-  description: string;
-  version: string;
-  base_url: string;
-  api_version: string;
-  contact?: {
-    name?: string;
-    email?: string;
-    url?: string;
-  };
-  license?: {
-    name: string;
-    url?: string;
-  };
-}
-
-export interface SearchQuery {
-  q?: string;
-  category?: string;
-  author?: string;
-  status?: ServerStatus;
-  page?: number;
-  per_page?: number;
-  sort_by?: 'name' | 'created_at' | 'updated_at' | 'popularity';
-  sort_order?: 'asc' | 'desc';
+  _meta?: Record<string, any>;
 }

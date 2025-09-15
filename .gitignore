@@ -8,9 +8,3 @@ docs/
 .env.development.local
 .env.test.local
 .env.production.local
-
-# SSL certificates (for local HTTPS development)
-*.pem
-*.key
-*.crt
-*.cert

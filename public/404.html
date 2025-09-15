@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - MCP Registry</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: #f8fafc;
+        }
+        .error-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 { 
+            font-size: 4rem; 
+            color: #dc2626; 
+            margin-bottom: 1rem;
+        }
+        h2 { 
+            color: #374151; 
+            margin-bottom: 1rem;
+        }
+        p { 
+            color: #6b7280; 
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        .home-link {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .home-link:hover {
+            background: #2563eb;
+        }
+        .links {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .links a {
+            color: #3b82f6;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .links a:hover {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>404</h1>
+        <h2>Page Not Found</h2>
+        <p>The page you're looking for doesn't exist in the MCP Registry. You might have followed a broken link or typed the URL incorrectly.</p>
+        
+        <a href="/" class="home-link">Return to Registry</a>
+        
+        <div class="links">
+            <a href="/">Home</a>
+            <a href="/api-test.html">API Tester</a>
+            <a href="https://github.com/modelcontextprotocol/servers">GitHub</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+name: Build and Test MCP Registry API
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Type check
+      run: npm run type-check
+
+    - name: Build project
+      run: npm run build
+
+    - name: Run tests
+      run: npm run test
+
+    - name: Check if server starts
+      run: |
+        # Start server in background
+        npm start &
+        SERVER_PID=$!
+        
+        # Wait for server to start
+        sleep 5
+        
+        # Test health endpoint
+        curl -f http://localhost:3000/health || exit 1
+        
+        # Test servers endpoint
+        curl -f http://localhost:3000/v0/servers || exit 1
+        
+        # Stop server
+        kill $SERVER_PID
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      if: success()
+      with:
+        name: dist-${{ matrix.node-version }}
+        path: dist/

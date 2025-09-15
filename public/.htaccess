@@ -1,0 +1,21 @@
+# Rewrite rules for API endpoints without .json extension
+RewriteEngine On
+
+# Health endpoint
+RewriteRule ^health$ health.json [L]
+
+# V0 API endpoints
+RewriteRule ^v0/servers$ v0/servers.json [L]
+RewriteRule ^v0/servers/([^/]+)$ v0/servers/$1.json [L]
+
+# Add CORS headers for API responses
+<FilesMatch "\.(json)$">
+    Header always set Access-Control-Allow-Origin "*"
+    Header always set Access-Control-Allow-Methods "GET, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type"
+</FilesMatch>
+
+# Set JSON content type
+<FilesMatch "\.(json)$">
+    ForceType application/json
+</FilesMatch>

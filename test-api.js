@@ -87,15 +87,15 @@ try {
   console.log('✅ index.html contains expected content');
 
   // Check server index
-  const indexPath = path.join(distPath, 'servers-index.json');
-  const indexContent = JSON.parse(fs.readFileSync(indexPath, 'utf-8'));
+  const serverIndexPath = path.join(distPath, 'servers-index.json');
+  const serverIndexContent = JSON.parse(fs.readFileSync(serverIndexPath, 'utf-8'));
   
-  if (indexContent.count !== jsonFiles.length) {
-    console.log(`❌ Server index count mismatch: expected ${jsonFiles.length}, got ${indexContent.count}`);
+  if (serverIndexContent.count !== jsonFiles.length) {
+    console.log(`❌ Server index count mismatch: expected ${jsonFiles.length}, got ${serverIndexContent.count}`);
     process.exit(1);
   }
   
-  console.log(`✅ Server index valid (${indexContent.count} servers, generated: ${indexContent.generated})`);
+  console.log(`✅ Server index valid (${serverIndexContent.count} servers, generated: ${serverIndexContent.generated})`);
 
   // Sample server data from first file
   const firstFile = jsonFiles[0];

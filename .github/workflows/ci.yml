@@ -1,4 +1,4 @@
-name: Build and Test MCP Registry API
+name: Build and Test MCP Registry
 
 on:
   pull_request:
@@ -28,26 +28,35 @@ jobs:
     - name: Type check
       run: npm run type-check
 
-    - name: Build project
-      run: npm run build
+    - name: Build static site
+      run: npm run build:static
 
-    - name: Run tests
-      run: npm run test
-
-    - name: Check if server starts
+    - name: Test static site build
       run: |
+        # Check that required files exist
+        ls -la dist/
+        test -f dist/index.html || exit 1
+        test -f dist/api.js || exit 1
+        test -f dist/api-test.html || exit 1
+        test -d dist/data/servers || exit 1
+        
+        # Check that data files are present
+        ls dist/data/servers/*.json | wc -l | grep -q [1-9] || exit 1
+
+    - name: Test with Python server
+      run: |
+        cd dist
         # Start server in background
-        npm start &
+        python3 -m http.server 8000 &
         SERVER_PID=$!
         
         # Wait for server to start
-        sleep 5
+        sleep 3
         
-        # Test health endpoint
-        curl -f http://localhost:3000/health || exit 1
-        
-        # Test servers endpoint
-        curl -f http://localhost:3000/v0/servers || exit 1
+        # Test that pages load
+        curl -f http://localhost:8000/ || exit 1
+        curl -f http://localhost:8000/api-test.html || exit 1
+        curl -f http://localhost:8000/data/servers/arxiv-mcp-server.json || exit 1
         
         # Stop server
         kill $SERVER_PID
@@ -56,5 +65,5 @@ jobs:
       uses: actions/upload-artifact@v4
       if: success()
       with:
-        name: dist-${{ matrix.node-version }}
+        name: static-site-${{ matrix.node-version }}
         path: dist/

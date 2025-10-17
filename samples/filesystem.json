@@ -1,0 +1,43 @@
+{
+  "name": "io.modelcontextprotocol/filesystem",
+  "description": "Node.js server implementing MCP for filesystem operations: list directories, read files, and manage project assets.",
+  "title": "Filesystem",
+  "repository": {
+    "url": "https://github.com/modelcontextprotocol/servers",
+    "source": "github"
+  },
+  "version": "1.0.2",
+  "websiteUrl": "https://modelcontextprotocol.io/examples/filesystem",
+  "icons": [
+    {
+      "src": "https://modelcontextprotocol.io/assets/icons/filesystem.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "64x64"
+      ]
+    }
+  ],
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@modelcontextprotocol/server-filesystem",
+      "version": "1.0.2",
+      "transport": {
+        "type": "stdio"
+      },
+      "runtimeArguments": [
+        {
+          "type": "named",
+          "name": "--stdio"
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "io.modelcontextprotocol.registry/publisher-provided": {
+      "tool": "registry-seed",
+      "version": "0.1.0"
+    }
+  }
+}

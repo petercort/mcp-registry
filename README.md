@@ -75,17 +75,31 @@ All configuration is read at start-up (`.env` is supported via `dotenv`).
 
 ## Deploying to Azure App Service
 
-Update the tfvars
+1. Login to Azure
 
-``` bash
-cd terraform
-cp terraform.tfvars.example terraform.tfvars
+```bash
+az login
 ```
 
-Log in to Azure if using terraform cli
+2. Configure variables
 
-``` bash
-az login
+```bash
+cd terraform
+cp terraform.tfvars.example terraform.tfvars
+Edit terraform.tfvars with your values
+```
+
+3. Deploy infrastructure
+
+```bash
+terraform init
+terraform apply
+```
+
+4. Get your API URL
+
+```bash
+terraform -chdir=terraform output api_url
 ```
 
 ## Tooling

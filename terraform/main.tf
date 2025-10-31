@@ -47,26 +47,6 @@ resource "azurerm_container_app_environment" "main" {
   tags = var.tags
 }
 
-# Storage Account for SQLite database persistence
-resource "azurerm_storage_account" "main" {
-  name                     = "${replace(var.project_name, "-", "")}${var.environment}st"
-  resource_group_name      = azurerm_resource_group.main.name
-  location                 = azurerm_resource_group.main.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  account_kind             = "StorageV2"
-  allow_nested_items_to_be_public  = false
-
-  tags = var.tags
-}
-
-# File Share for SQLite database
-resource "azurerm_storage_share" "db" {
-  name                 = "mcp-registry-db"
-  storage_account_name = azurerm_storage_account.main.name
-  quota                = 1 # 1 GB
-}
-
 # Container Registry
 resource "azurerm_container_registry" "main" {
   name                = "${replace(var.project_name, "-", "")}${var.environment}acr"

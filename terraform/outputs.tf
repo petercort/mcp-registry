@@ -29,8 +29,3 @@ output "api_url" {
   description = "Full URL of the API"
   value       = "https://${azurerm_container_app.api.ingress[0].fqdn}"
 }
-
-output "storage_account_name" {
-  description = "Name of the storage account"
-  value       = azurerm_storage_account.main.name
-}

@@ -49,12 +49,16 @@ resource "azurerm_container_app_environment" "main" {
 
 # Container Registry
 resource "azurerm_container_registry" "main" {
-  name                = "${replace(var.project_name, "-", "")}${var.environment}acr"
-  resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
-  sku                 = "Basic"
-  admin_enabled       = true
-
+  name                          = "${replace(var.project_name, "-", "")}${var.environment}acr"
+  resource_group_name           = azurerm_resource_group.main.name
+  location                      = azurerm_resource_group.main.location
+  sku                           = "Premium"
+  admin_enabled                 = true
+  public_network_access_enabled = false
+  
+  network_rule_set {
+    default_action = "Deny"
+  }
   tags = var.tags
 }
 
@@ -85,7 +89,7 @@ resource "null_resource" "docker_build_push" {
   depends_on = [azurerm_container_registry.main]
 }
 
-# Container App
+# Container App with Managed Identity
 resource "azurerm_container_app" "api" {
   name                         = "${var.project_name}-${var.environment}-api"
   container_app_environment_id = azurerm_container_app_environment.main.id
